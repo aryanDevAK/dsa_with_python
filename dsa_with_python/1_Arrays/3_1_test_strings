@@ -1,0 +1,151 @@
+import sys
+import io
+from typing import List
+
+# 1. Basics Demo
+def string_basics_demo():
+    single_quote_str = 'Python\'s strings are easy'
+    double_quote_str = "Python's strings are easy"
+    multiline_str = """Line one
+Line two
+Line three"""
+    escaped_path = "C:\\new_folder\\test.txt"
+    raw_path = r"C:\new_folder\test.txt"
+    name = "Aryan"
+    age = 20
+    formatted = f"Hello {name}, in 5 years you will be {age + 5}."
+    print(f"Single Quote Escaped: {single_quote_str}")
+    print(f"Raw Path: {raw_path}")
+    print(f"f-String Output: {formatted}")
+    
+    # String Interning Demonstration
+    word1 = "data_structure"
+    word2 = "data_structure"
+    print(f"Literal interning (word1 is word2): {word1 is word2}")  # True
+    
+    part1 = "data_"
+    part2 = "structure"
+    dynamic_word = part1 + part2
+    print(f"Dynamic string (word1 is dynamic_word): {word1 is dynamic_word}")  # False
+    
+    interned_dynamic = sys.intern(dynamic_word)
+    print(f"Forced interning (word1 is interned_dynamic): {word1 is interned_dynamic}")  # True
+
+    # Unicode vs. Bytes Demonstration
+    unicode_text = "Python-Café"
+    utf8_bytes = unicode_text.encode("utf-8")
+    decoded_text = utf8_bytes.decode("utf-8")
+    
+    print(f"Unicode Str: {unicode_text} (Type: {type(unicode_text)})")
+    print(f"UTF-8 Bytes: {utf8_bytes} (Type: {type(utf8_bytes)})")
+    print(f"Decoded Str: {decoded_text}")
+
+    # Proof of Immutability
+    test_str = "hello"
+    try:
+        test_str[0] = 'H'
+    except TypeError as e:
+        print(f"Caught expected TypeError: {e}")
+
+# 2. Slicing Demo
+def string_slicing_demo():
+    s = "ComputerScience"
+    s1 = "Data"
+    s2 = "Structures"
+    concatenated = s1 + " " + s2
+    sub_slice = s[8:15]
+    every_second_char = s[::2]
+    reverse_string = s[::-1]
+    sentence = "apple banana apple grape apple"
+    python_replace_first = sentence.replace("apple", "orange", 1)
+    python_replace_all = sentence.replace("apple", "orange")
+    
+    prefix_slice = slice(0, 8)
+    suffix_slice = slice(8, None)
+    print(f"Prefix via Slice Object: {s[prefix_slice]}")
+    print(f"Suffix via Slice Object: {s[suffix_slice]}")
+    print(f"Slice (8:15): {sub_slice}")
+    print(f"Reverse: {reverse_string}")
+    print(f"Replace First: {python_replace_first}")
+    print(f"Replace All: {python_replace_all}")
+
+# 3. Search and Transform Demo
+def string_search_transform_demo():
+    s = "  Python Programming Language  "
+    trimmed = s.strip()
+    upper = trimmed.upper()
+    lower = trimmed.lower()
+    has_prefix = trimmed.startswith("Py")
+    has_suffix = trimmed.endswith("Language")
+    contains_prog = "Programming" in trimmed
+    first_index_g = trimmed.find("g")
+    last_index_g = trimmed.rfind("g")
+    missing_find = trimmed.find("Java")
+    
+    # Padding
+    raw_num = "42"
+    padded_left = raw_num.rjust(5, "0")
+    padded_right = raw_num.ljust(5, "-")
+    padded_center = "Title".center(15, "*")
+    
+    # Boolean Inspections
+    is_numeric = "12345".isdigit()
+    is_alphabetic = "Python".isalpha()
+    is_space = "   ".isspace()
+
+    # Case folding
+    germ_word1 = "Strasse"
+    germ_word2 = "Straße"
+    unicode_match = germ_word1.casefold() == germ_word2.casefold()
+
+    print(f"Trimmed: '{trimmed}'")
+    print(f"Starts with 'Py'?: {has_prefix}")
+    print(f"Contains 'Programming'?: {contains_prog}")
+    print(f"First 'g' index: {first_index_g} | Last 'g' index: {last_index_g}")
+    print(f"Padded left/right/center: '{padded_left}' | '{padded_right}' | '{padded_center}'")
+    print(f"Boolean checks: digits={is_numeric}, alphas={is_alphabetic}, spaces={is_space}")
+    print(f"Unicode case-folding match: {unicode_match}")
+
+# 4. Split and Join Demo
+def split_join_demo():
+    csv_line = "apple,banana,orange,grape"
+    fruits_list = csv_line.split(",")
+    print(f"Splits List: {fruits_list}")
+    spaced_string = " | ".join(fruits_list)
+    print(f"Joined String: {spaced_string}")
+    limited_split = csv_line.split(",", maxsplit=2)
+    print(f"Limited Split (max 2): {limited_split}")
+
+# 5. Concatenation Buffer Comparison
+def compare_concatenations():
+    iterations = 10_000
+    s = ""
+    for i in range(iterations):
+        s += "a"
+    list_accumulator = []
+    for i in range(iterations):
+        list_accumulator.append("a")
+    list_str = "".join(list_accumulator)
+    buffer = io.StringIO()
+    for i in range(iterations):
+        buffer.write("a")
+    stringio_str = buffer.getvalue()
+    buffer.close()
+    print("Buffer comparison executed successfully.")
+
+
+if __name__ == "__main__":
+    print("--- Testing Basics ---")
+    string_basics_demo()
+    
+    print("\n--- Testing Slicing ---")
+    string_slicing_demo()
+    
+    print("\n--- Testing Search/Transform ---")
+    string_search_transform_demo()
+    
+    print("\n--- Testing Split/Join ---")
+    split_join_demo()
+
+    print("\n--- Testing StringIO ---")
+    compare_concatenations()
